@@ -34,6 +34,7 @@ package net.sf.jalita.io;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
@@ -88,6 +89,20 @@ public class VT100TerminalIO extends BasicTerminalIO {
 		beeper.start();
 
 		this.socket = socket;
+	}
+
+	/** Creates a new VT100 object */
+	public VT100TerminalIO(InputStream inputStream, OutputStream outputStream) throws IOException {
+		super();
+		log.debug("Creating instance of VT100Terminal");
+		BufferedOutputStream bos = new BufferedOutputStream(outputStream);
+		BufferedInputStream bis = new BufferedInputStream(inputStream);
+		IACHandler = new IACHandler(bis, bos);
+		out = new VT100Writer(bos);
+		in = new VT100Reader(bis);
+		in.setIACHandler(new IACHandler(bis, bos));
+		beeper = new Beeper(socket.getOutputStream());
+		beeper.start();
 	}
 
 

@@ -101,7 +101,7 @@ public class VT100TerminalIO extends BasicTerminalIO {
 		out = new VT100Writer(bos);
 		in = new VT100Reader(bis);
 		in.setIACHandler(new IACHandler(bis, bos));
-		beeper = new Beeper(socket.getOutputStream());
+		beeper = new Beeper(outputStream);
 		beeper.start();
 	}
 
